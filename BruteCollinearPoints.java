@@ -7,7 +7,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class BruteCollinearPoints {
     
-    private LineSegment[] mSegments = null;
+    private LineSegment[] mSegments = new LineSegment[0];
     
     public BruteCollinearPoints(Point[] points) {
         // finds all line segments containing 4 points
@@ -16,19 +16,29 @@ public class BruteCollinearPoints {
         
         Queue<LineSegment> segQueue = new Queue<LineSegment>();
         
-        //to find the line segments that are collinear, calculate the slope
-        //among themselves 
+        // to find the line segments that are collinear, calculate the slope
+        // among themselves 
         for (int p = 0; p < points.length; p++) {
+            if (points[p] == null)
+                throw new java.lang.IllegalArgumentException("null element provided");
             for (int q = p+1; q < points.length; q++) {
+                if (points[q] == null)
+                    throw new java.lang.IllegalArgumentException("null element provided");
+                if (points[p].compareTo(points[q]) == 0)
+                    throw new java.lang.IllegalArgumentException("duplicate element provided");
                 for (int r = q+1; r < points.length; r++) {
+                    if (points[r] == null)
+                        throw new java.lang.IllegalArgumentException("null element provided");
                     for (int s = r+1; s < points.length; s++) {
+                        if (points[s] == null)
+                            throw new java.lang.IllegalArgumentException("null element provided");
                         double sq = points[p].slopeTo(points[q]);
                         double sr = points[p].slopeTo(points[r]);
                         double ss = points[p].slopeTo(points[s]);
                         
                         if (sq == sr && sq == ss) {
-                            //obtain the highest and the lowest point and create a line segment
-                            Point[] aPoint = new Point[]{points[p], points[q], points[r], points[s]} ;
+                            // obtain the highest and the lowest point and create a line segment
+                            Point[] aPoint = new Point[]{points[p], points[q], points[r], points[s]};
                             Arrays.sort(aPoint);
                             segQueue.enqueue(new LineSegment(aPoint[0], aPoint[3]));
                         }
@@ -54,7 +64,7 @@ public class BruteCollinearPoints {
     }
     
     public LineSegment[] segments() {
-        return mSegments;
+        return mSegments.clone();
     }
 
     public static void main(String[] args) {
@@ -73,7 +83,7 @@ public class BruteCollinearPoints {
         StdDraw.enableDoubleBuffering();
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
-        //Fabio
+        // Fabio
 //        int i = 0;
         for (Point p : points) {
 //            p.draw(i);
@@ -90,7 +100,5 @@ public class BruteCollinearPoints {
             segment.draw();
         }
         StdDraw.show();
-        
     }
-
 }
